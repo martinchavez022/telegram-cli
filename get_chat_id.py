@@ -1,14 +1,19 @@
 import requests
-import time 
+import time
+from db import DatabaseActivity as DBAc
 
 from configs import LoadConfigs
+
+db_conn = DBAc()
+
+# base de datos para almacenar las variables del chat
 
 cf = LoadConfigs()
 URL = f"https://api.telegram.org/bot{cf.BOT_TOKEN}/getUpdates"
 
 def get_chat_id():
     last_update_id = None
-    print("ENvia un mensaje a tu bot en Telegram....")
+    print("Envia un mensaje al chat con el bot..")
 
     while True:
         try:
@@ -22,6 +27,7 @@ def get_chat_id():
                     user = update["message"]["from"]["first_name"]
 
                     print(f" chat_id encontrado: {chat_id} (usuario: {user})")
+                    db_conn.insert_chat(chat_id, "Chat Bot"),
                     return chat_id
         except Exception as e:
             print("Error:", e)
